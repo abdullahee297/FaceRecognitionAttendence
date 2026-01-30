@@ -19,36 +19,51 @@ options = FaceLandmarkerOptions(
 
 detector = FaceLandmarker.create_from_options(options)
 
-cap = cv2.VideoCapture(0)
 
-while True:
-    success, img = cap.read()
+# cap = cv2.VideoCapture(0)
 
-    if not success:
-        break
+def imgconvert(imgaepath):
+    image = cv2.imread(imgaepath)
+    converted = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-    rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    mp_image = mp.Image(mp.ImageFormat.SRGB, rgb)
 
-    result = detector.detect(mp_image)
 
-    if result.face_landmarks:
-        for face in result.face_landmarks:
-            h, w, _ = img.shape
+img = cv2.imread("img3_test.jpg")
+
+if img is None:
+    print("Image not found")
+    exit()
+
+# Convert to RGB
+rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
+
+# Detect face
+result = detector.detect(mp_image)
+
+# Draw landmarks
+if result.face_landmarks:
+    for face in result.face_landmarks:
+        h, w, _ = img.shape
+        x_list = []
+        y_list = []
+
+        for lm in face:
+            x = int(lm.x * w)
+            x_list.append(x)
+            y = int(lm.y * h)
+            y_list.append(y)
             
-            lm_list = []
-            
-            for lm in face:
-                lm_list.append((int(lm.x*w), int(lm.y*h)))
-                
-            for x, y in lm_list:
-                cv2.circle(img, (x, y), 1, (255, 255, 0), cv2.FILLED)
+            # cv2.circle(img, (x, y), 1, (0, 255, 255), cv2.FILLED)
+
+        x_min, x_max = min(x_list), max(x_list)
+        y_min, y_max = min(y_list), max(y_list)
+        cv2.rectangle(img, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
 
 
+screen_width = 720
+screen_height = 800
 
-    cv2.imshow("Face Recognition Attendence System", img)
-    if cv2.waitKey(1) & 0xFF == 27:
-        break
-
-cap.release()
-cv2.destroyAllWindows
+img = cv2.resize(img, (screen_width, screen_height))
+cv2.imshow("Face Detection", img)
+cv2.waitKey(0)
