@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+
+<h1>Face Registration</h1>
+
+<form method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <input type="text" name="username" placeholder="Username"><br><br>
+
+    <input type="email" name="email" placeholder="Email"><br><br>
+
+    <input type="password" name="password" placeholder="Password"><br><br>
+
+    <input type="text" name="phone" placeholder="Phone"><br><br>
+
+    <input type="text" name="department" placeholder="Department"><br><br>
+
+    <input type="file" name="profile_image"><br><br>
+
+    <video id="video" width="400" autoplay></video>
+
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <br><br>
+
+    <button type="button" onclick="captureImages()">
+        Capture Dataset
+    </button>
+
+    <button type="submit">
+        Register
+    </button>
+
+</form>
+
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+
+    let capturedImages = [];
+
+    navigator.mediaDevices.getUserMedia({
+        video: true
+    })
+    .then(stream => {
+        video.srcObject = stream;
+    });
+
+    function captureImages() {
+
+        const context = canvas.getContext('2d');
+
+        canvas.width = 400;
+        canvas.height = 300;
+
+        let count = 0;
+
+        const interval = setInterval(() => {
+
+            context.drawImage(video, 0, 0, 400, 300);
+
+            const image = canvas.toDataURL('image/jpeg');
+
+            capturedImages.push(image);
+
+            let input = document.createElement('input');
+
+            input.type = 'hidden';
+            input.name = 'images[]';
+            input.value = image;
+
+            document.forms[0].appendChild(input);
+
+            count++;
+
+            if(count >= 20) {
+
+                clearInterval(interval);
+
+                alert('Dataset Captured Successfully');
+            }
+
+        }, 300);
+    }
+</script>
+
+</body>
+</html>
