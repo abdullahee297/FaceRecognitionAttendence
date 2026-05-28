@@ -24,6 +24,8 @@ from account.views import register
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('account.urls')),
+    path('', include('recognition.urls')),
+    path('', include('attendance.urls')),
 ]
 
 if settings.DEBUG:

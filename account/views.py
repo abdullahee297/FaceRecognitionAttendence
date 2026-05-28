@@ -1,10 +1,16 @@
 import os
 import base64
+
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import Employ
+from django.contrib.auth import authenticate, login, logout
+
+from .models import Employee
 from .forms import Register
+
+from recognition.utils import generate_face_encoding
+
 
 def register(request):
 
@@ -22,7 +28,7 @@ def register(request):
             password=password
         )
 
-        employee = Employ.objects.create(
+        employee = Employee.objects.create(
             user=user,
             phone=phone,
             department=department,
@@ -54,6 +60,50 @@ def register(request):
             with open(file_path, 'wb') as f:
                 f.write(image_file)
 
-        return redirect('/admin')
+            encoding_folder = os.path.join(
+                settings.MEDIA_ROOT,
+                'encodings',
+                username
+            )
+
+            os.makedirs(encoding_folder, exist_ok=True)
+
+            encoding_path = os.path.join(
+                encoding_folder,
+                f'{index}.pkl'
+            )
+
+            generate_face_encoding(file_path, encoding_path)
+
+        return redirect('/login')
 
     return render(request, 'account/register.html')
+
+def login_view(request):
+
+    error = ""
+
+    if request.method == 'POST':
+
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+
+            login(request, user)
+
+            return redirect('/dashboard/')
+
+        else:
+
+            error = "Invalid username or password"
+
+    return render(
+        request, 'account/login.html',{'error': error}
+    )

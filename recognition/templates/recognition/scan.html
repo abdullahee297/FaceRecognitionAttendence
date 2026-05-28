@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan Face</title>
+</head>
+<body>
+
+<h1>Face Attendance Scanner</h1>
+
+<video id="video" width="500" autoplay></video>
+
+<br><br>
+
+<button onclick="scanFace()">
+    Scan Face
+</button>
+
+<script>
+
+const video = document.getElementById('video');
+
+navigator.mediaDevices.getUserMedia({
+    video: true
+})
+.then(stream => {
+    video.srcObject = stream;
+});
+
+function scanFace() {
+
+    const canvas = document.createElement('canvas');
+
+    canvas.width = 500;
+    canvas.height = 400;
+
+    const ctx = canvas.getContext('2d');
+
+    ctx.drawImage(video, 0, 0, 500, 400);
+
+    const image = canvas.toDataURL('image/jpeg');
+
+    fetch('/scan-face/', {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+
+        body: JSON.stringify({
+            image: image
+        })
+
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        alert(data.message);
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

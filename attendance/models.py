@@ -1,10 +1,10 @@
 from django.db import models
-from account.models import Employ
+from account.models import Employee
 
 # Create your models here.
 
 class Attendance(models.Model):
-    employee = models.ForeignKey(Employ, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     check_in = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, default='Preent')
 
