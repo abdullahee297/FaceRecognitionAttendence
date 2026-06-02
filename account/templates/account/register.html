@@ -1,93 +1,322 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Register</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Face Registration</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+    overflow:hidden;
+}
+
+.header{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+.header h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.header p{
+    opacity:0.9;
+}
+
+.content{
+    padding:35px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.input-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.input-group label{
+    margin-bottom:8px;
+    font-weight:600;
+    color:#444;
+}
+
+.input-group input{
+    padding:14px;
+    border:2px solid #e5e5e5;
+    border-radius:12px;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.input-group input:focus{
+    outline:none;
+    border-color:#667eea;
+    box-shadow:0 0 10px rgba(102,126,234,0.2);
+}
+
+.file-upload{
+    grid-column:span 2;
+}
+
+.video-section{
+    margin-top:30px;
+    text-align:center;
+}
+
+.video-section h3{
+    margin-bottom:15px;
+    color:#333;
+}
+
+video{
+    width:100%;
+    max-width:500px;
+    border-radius:15px;
+    border:4px solid #667eea;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.status{
+    margin-top:15px;
+    font-weight:bold;
+    color:#667eea;
+}
+
+.button-group{
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    margin-top:30px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:14px 30px;
+    border:none;
+    border-radius:12px;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.capture-btn{
+    background:#ff9800;
+}
+
+.capture-btn:hover{
+    box-shadow:0 10px 20px rgba(255,152,0,0.3);
+}
+
+.register-btn{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+}
+
+.register-btn:hover{
+    box-shadow:0 10px 20px rgba(102,126,234,0.3);
+}
+
+.success{
+    color:green;
+    text-align:center;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+@media(max-width:768px){
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .file-upload{
+        grid-column:span 1;
+    }
+
+    .content{
+        padding:20px;
+    }
+
+    .header h1{
+        font-size:26px;
+    }
+}
+</style>
 </head>
 <body>
 
-<h1>Face Registration</h1>
+<div class="container">
 
-<form method="POST" enctype="multipart/form-data">
+    <div class="header">
+        <h1>Face Registration</h1>
+        <p>Create your account and capture your facial dataset</p>
+    </div>
 
-    {% csrf_token %}
+    <div class="content">
 
-    <input type="text" name="username" placeholder="Username"><br><br>
+        <form method="POST" enctype="multipart/form-data">
 
-    <input type="email" name="email" placeholder="Email"><br><br>
+            {% csrf_token %}
 
-    <input type="password" name="password" placeholder="Password"><br><br>
+            <div class="form-grid">
 
-    <input type="text" name="phone" placeholder="Phone"><br><br>
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="Enter username">
+                </div>
 
-    <input type="text" name="department" placeholder="Department"><br><br>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Enter email">
+                </div>
 
-    <input type="file" name="profile_image"><br><br>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter password">
+                </div>
 
-    <video id="video" width="400" autoplay></video>
+                <div class="input-group">
+                    <label>Phone</label>
+                    <input type="text" name="phone" placeholder="Enter phone number">
+                </div>
 
-    <canvas id="canvas" style="display:none;"></canvas>
+                <div class="input-group file-upload">
+                    <label>Profile Image</label>
+                    <input type="file" name="profile_image">
+                </div>
 
-    <br><br>
+                <div class="input-group file-upload">
+                    <label>Department</label>
+                    <input type="text" name="department" placeholder="Enter department">
+                </div>
 
-    <button type="button" onclick="captureImages()">
-        Capture Dataset
-    </button>
+            </div>
 
-    <button type="submit">
-        Register
-    </button>
+            <div class="video-section">
 
-</form>
+                <h3>Live Camera Feed</h3>
+
+                <video id="video" autoplay></video>
+
+                <canvas id="canvas" style="display:none;"></canvas>
+
+                <div class="status" id="status">
+                    Ready to capture dataset
+                </div>
+
+            </div>
+
+            <div class="button-group">
+                <button type="button"
+                        class="btn capture-btn"
+                        onclick="captureImages()">
+                    Capture Dataset
+                </button>
+
+                <button type="submit"
+                        class="btn register-btn">
+                    Register
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
 
-    let capturedImages = [];
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const statusText = document.getElementById('status');
 
-    navigator.mediaDevices.getUserMedia({
-        video: true
-    })
-    .then(stream => {
-        video.srcObject = stream;
-    });
+let capturedImages = [];
 
-    function captureImages() {
+navigator.mediaDevices.getUserMedia({
+    video:true
+})
+.then(stream => {
+    video.srcObject = stream;
+});
 
-        const context = canvas.getContext('2d');
+function captureImages(){
 
-        canvas.width = 400;
-        canvas.height = 300;
+    const context = canvas.getContext('2d');
 
-        let count = 0;
+    canvas.width = 400;
+    canvas.height = 300;
 
-        const interval = setInterval(() => {
+    let count = 0;
 
-            context.drawImage(video, 0, 0, 400, 300);
+    statusText.innerHTML = "Capturing images...";
 
-            const image = canvas.toDataURL('image/jpeg');
+    const interval = setInterval(() => {
 
-            capturedImages.push(image);
+        context.drawImage(video,0,0,400,300);
 
-            let input = document.createElement('input');
+        const image = canvas.toDataURL('image/jpeg');
 
-            input.type = 'hidden';
-            input.name = 'images[]';
-            input.value = image;
+        capturedImages.push(image);
 
-            document.forms[0].appendChild(input);
+        let input = document.createElement('input');
 
-            count++;
+        input.type = 'hidden';
+        input.name = 'images[]';
+        input.value = image;
 
-            if(count >= 20) {
+        document.forms[0].appendChild(input);
 
-                clearInterval(interval);
+        count++;
 
-                alert('Dataset Captured Successfully');
-            }
+        statusText.innerHTML =
+            `Captured ${count} / 20 Images`;
 
-        }, 300);
-    }
+        if(count >= 20){
+
+            clearInterval(interval);
+
+            statusText.innerHTML =
+                "✅ Dataset Captured Successfully";
+
+            alert("Dataset Captured Successfully");
+        }
+
+    },300);
+}
 </script>
 
 </body>
