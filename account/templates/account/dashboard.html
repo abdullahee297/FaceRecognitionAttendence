@@ -1,31 +1,237 @@
-<h1>Attendance Dashboard</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Dashboard</title>
 
-<table border="1">
+<style>
 
-<tr>
-    <th>Name</th>
-    <th>Check In</th>
-    <th>Status</th>
-</tr>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
 
-{% for attendance in attendances %}
+body{
+    background:#f4f7fc;
+    min-height:100vh;
+}
 
-<tr>
+.header{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:25px 40px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
 
-<td>
-    {{ attendance.employee.user.username }}
-</td>
+.header h1{
+    font-size:32px;
+}
 
-<td>
-    {{ attendance.check_in }}
-</td>
+.container{
+    max-width:1200px;
+    margin:30px auto;
+    padding:0 20px;
+}
 
-<td>
-    {{ attendance.status }}
-</td>
+.stats-card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
 
-</tr>
+.stats-card h2{
+    color:#555;
+    margin-bottom:10px;
+}
 
-{% endfor %}
+.stats-number{
+    font-size:40px;
+    font-weight:bold;
+    color:#667eea;
+}
 
-</table>
+.table-card{
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.table-header{
+    padding:20px 25px;
+    border-bottom:1px solid #eee;
+}
+
+.table-header h2{
+    color:#333;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#667eea;
+    color:white;
+}
+
+th{
+    padding:18px;
+    text-align:left;
+    font-size:15px;
+}
+
+td{
+    padding:18px;
+    border-bottom:1px solid #f0f0f0;
+}
+
+tbody tr:hover{
+    background:#f8f9ff;
+}
+
+.badge{
+    padding:8px 15px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+    display:inline-block;
+}
+
+.present{
+    background:#d4edda;
+    color:#155724;
+}
+
+.late{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.absent{
+    background:#f8d7da;
+    color:#721c24;
+}
+
+.empty-state{
+    text-align:center;
+    padding:40px;
+    color:#888;
+}
+
+@media(max-width:768px){
+
+    .header{
+        padding:20px;
+    }
+
+    .header h1{
+        font-size:24px;
+    }
+
+    table{
+        font-size:14px;
+    }
+
+    th,td{
+        padding:12px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Attendance Dashboard</h1>
+</div>
+
+<div class="container">
+
+    <div class="stats-card">
+        <h2>Total Attendance Records</h2>
+        <div class="stats-number">
+            {{ attendances|length }}
+        </div>
+    </div>
+
+    <div class="table-card">
+
+        <div class="table-header">
+            <h2>Employee Attendance</h2>
+        </div>
+
+        {% if attendances %}
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Check In Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for attendance in attendances %}
+
+            <tr>
+
+                <td>
+                    {{ attendance.employee.user.username }}
+                </td>
+
+                <td>
+                    {{ attendance.check_in }}
+                </td>
+
+                <td>
+
+                    {% if attendance.status == "Present" %}
+                        <span class="badge present">
+                            {{ attendance.status }}
+                        </span>
+
+                    {% elif attendance.status == "Late" %}
+                        <span class="badge late">
+                            {{ attendance.status }}
+                        </span>
+
+                    {% else %}
+                        <span class="badge absent">
+                            {{ attendance.status }}
+                        </span>
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty-state">
+            No attendance records found.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
