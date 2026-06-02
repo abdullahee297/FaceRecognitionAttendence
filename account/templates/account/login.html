@@ -1,39 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Login</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .login-container{
+            width:400px;
+            background:#fff;
+            padding:40px;
+            border-radius:20px;
+            box-shadow:0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .login-header{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        .login-header h1{
+            color:#333;
+            font-size:32px;
+            margin-bottom:10px;
+        }
+
+        .login-header p{
+            color:#777;
+            font-size:14px;
+        }
+
+        .input-group{
+            margin-bottom:20px;
+        }
+
+        .input-group label{
+            display:block;
+            margin-bottom:8px;
+            color:#444;
+            font-weight:600;
+        }
+
+        .input-group input{
+            width:100%;
+            padding:14px;
+            border:2px solid #e0e0e0;
+            border-radius:12px;
+            font-size:16px;
+            transition:0.3s;
+        }
+
+        .input-group input:focus{
+            outline:none;
+            border-color:#667eea;
+            box-shadow:0 0 10px rgba(102,126,234,0.2);
+        }
+
+        .login-btn{
+            width:100%;
+            padding:14px;
+            border:none;
+            border-radius:12px;
+            background:linear-gradient(135deg, #667eea, #764ba2);
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .login-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 10px 20px rgba(102,126,234,0.3);
+        }
+
+        .error-message{
+            margin-top:15px;
+            text-align:center;
+            color:#e53935;
+            font-weight:600;
+        }
+
+        .footer{
+            margin-top:20px;
+            text-align:center;
+            color:#777;
+            font-size:13px;
+        }
+
+        @media(max-width:450px){
+            .login-container{
+                width:90%;
+                padding:30px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<h1>Employee Login</h1>
+    <div class="login-container">
 
-<form method="POST">
+        <div class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Employee Management System</p>
+        </div>
 
-    {% csrf_token %}
+        <form method="POST">
 
-    <input type="text"
-           name="username"
-           placeholder="Username"
-           required>
+            {% csrf_token %}
 
-    <br><br>
+            <div class="input-group">
+                <label>Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter your username"
+                    required>
+            </div>
 
-    <input type="password"
-           name="password"
-           placeholder="Password"
-           required>
+            <div class="input-group">
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required>
+            </div>
 
-    <br><br>
+            <button type="submit" class="login-btn">
+                Login
+            </button>
 
-    <button type="submit">
-        Login
-    </button>
+        </form>
 
-</form>
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
 
-<p style="color:red;">
-    {{ error }}
-</p>
+        <div class="footer">
+            © 2026 Employee Portal
+        </div>
+
+    </div>
 
 </body>
 </html>
