@@ -415,45 +415,19 @@ python manage.py collectstatic
 
 ## Registration Page
 
-Add screenshot here:
-
-```text
 <img width="1126" height="878" alt="Screenshot 2026-06-03 121354" src="https://github.com/user-attachments/assets/653d9b0a-ab9f-48e5-a369-15eff8b1ad50" />
-
-```
-
----
 
 ## Login Page
 
-Add screenshot here:
-
-```text
 <img width="498" height="588" alt="Screenshot 2026-06-03 121330" src="https://github.com/user-attachments/assets/a834b842-4532-4d06-98c4-2dccc3661458" />
-
-```
-
----
 
 ## Dashboard
 
-Add screenshot here:
-
-```text
 <img width="1919" height="910" alt="Screenshot 2026-06-03 121315" src="https://github.com/user-attachments/assets/1b58db67-bfcf-4dd2-a100-c75c01fe1888" />
-
-```
-
----
 
 ## Face Scanner
 
-Add screenshot here:
-
-```text
 <img width="875" height="776" alt="Screenshot 2026-06-03 121256" src="https://github.com/user-attachments/assets/7b96e625-28cc-4610-b432-2db65a655170" />
-
-```
 
 ---
 
